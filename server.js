@@ -1,32 +1,26 @@
 import express from 'express';
 import graphqlHTTP  from 'express-graphql';
 import schema  from './schema';
+import { getEnabledCategories } from 'trace_events';
+import path from 'path';
+import webpack from 'webpack';
+import WebPackDevServer from 'webpack-dev-server';
+import {schema} from './data/database' ; // adding later 
 
 
-const app= express();
+const APP_PORT=3000;
+const GRAPHQL_PORT=8080;
 
-app.get('/',(req,res) =>{
-   res.send('Graphql & relay modern') ;
-});
- const root = {friend:(args)=>{
-   return{
-     "id":122315456,
-     "firstname":"Sofiane",
-     "lastname":"benmesvah",
-     "gender":"Female",
-     "language":"English", 
-     "email":"vooven@gmail.com"
-   }
- }
+//Graphql server 
 
-};  
+const graphqlServer= express();
 
- app.use('/graphql',graphqlHTTP({
+graphqlServer.use('/graphql',graphqlHTTP({
   schema,
-  rootValue:root,
+ pretty:true,
   graphiql:true,
 
  }));
-app.listen(8080,()=>{
-  console.log('Running server on localhost:8080/graphql');
+ graphqlServer.listen(GRAPHQL_PORT,()=>{
+  console.log(`Running server on localhost:${GRAPHQL_PORT}`);
 });
